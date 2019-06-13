@@ -1,3 +1,3 @@
 
-import matgen
-import decomposition
+from . import matgen
+from . import decomposition
