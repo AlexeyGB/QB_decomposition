@@ -1,6 +1,8 @@
 import numpy as np
 import torch
 
+from .utils import orth, norm
+
 def randQB(A, k, s, use_torch=False, device='cpu'):
     '''
     A: matrix
@@ -9,8 +11,11 @@ def randQB(A, k, s, use_torch=False, device='cpu'):
     '''
     m, n = A.shape
     
-    if torch:
+    if use_torch:
         raise NotImplementedError
     else:
-        omega = np.random.randn(n, k + s)
-        #Q = 
+        Omega = np.random.randn(n, k + s)
+        Q = orth(np.matmul(A, Omega))
+        B = np.matmul(Q.T, A)
+        
+    return Q, B
