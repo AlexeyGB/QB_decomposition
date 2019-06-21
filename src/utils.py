@@ -13,24 +13,24 @@ def norm(A, ord=None):
     else:
         return np.linalg.norm(A, ord=ord)
     
-def time_task(func, metric, num_starts=1, A, *args, **kwargs):
+def time_task(A, func, metric, num_starts=1, *args, **kwargs):
     '''
     Runs task several times, calculates metric 
+    A: matrix
     func: function to run
     metric: metric to calculate. gets matrix A and value, returned
         by func, as arguments
-    A: matrix
     args, kwargs: arguments for func
     '''
     runtimes = np.empty(shape=(num_starts, ), dtype=np.float64)
     metrics =  np.empty(shape=(num_starts, ), dtype=np.float64)
-    for i in range(runtimes):
+    for i in range(num_starts):
         time_start = time()
         ret_val = func(A, *args, **kwargs)
         runtimes[i] = time() - time_start
         metrics[i] = metric(A, *ret_val)
         
-    return runtimes, metrics
+    return np.array(runtimes), np.array(metrics)
 
 def QB_error(A, Q, B):
     A_reconstr = np.matmul(Q, B)

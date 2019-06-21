@@ -91,7 +91,7 @@ def randQB_EI(A, rel_err, b, p=0, use_torch=False, device='cpu'):
                 # power iteration
                 for j in range(1, p+1):
                     Q_i = orth(np.matmul(A.T, Q_i) - np.matmul(B.T, np.matmul(Q.T, Q_i)))
-                    Q_i = orth(np.matmul(A, Q_i) - np.matmul(Q, np.matmul(Q.T, Q_i)))
+                    Q_i = orth(np.matmul(A, Q_i) - np.matmul(Q, np.matmul(B, Q_i)))
                     
                 Q_i = orth(Q_i - np.matmul(Q, np.matmul(Q.T, Q_i)))
             if i == 0:
@@ -146,3 +146,10 @@ def greedyQB(A, rel_err):
         i += 1
     
     return Q, B
+
+
+def SVD_from_QB(A, QB_method=randQB, *args, **kwargs):
+    Q, B = QB_method(A, *args, **kwargs)
+    U_, S, Vh = np.linalg.svd(B, full_matrices=False)
+    U = Q @ U_
+    return U, S, Vh
